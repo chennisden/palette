@@ -1,0 +1,10 @@
+# Remove tex-generated files
+*.sty
+*.log
+*.aux
+*.idx
+*.glo
+
+# Glossary files
+*.gls
+*.ilg
