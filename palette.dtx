@@ -1,5 +1,5 @@
 % \iffalse meta-comment
-% This package was written for pdflatex.
+% This package was written for pdfLaTeX.
 % In particular, there is no guarantee that this works for other tex engines.
 %
 % Copyright (C) 2021 Dennis Chen <proofprogram@gmail.com>
@@ -13,13 +13,42 @@
 % and version 1.3 or later is part of all distributions of LaTeX
 % version 2005/12/01 or later.
 %
+%<*internal>
+\iffalse
+*</internal>
+%<*readme>
+# The LaTeX package palette - version 1.0.0 (2021/07/22)
+
+**palette** provides the ability to create custom color palettes and symbol palettes ("symbol suites"), and swap one palette in for another easily. It also allows the user to create a variable that represents the selected palette, and provides checks in case the variable represents a palette that does not exist.
+
+The package is split into `colorpalette` and `symbolsuite'.
+
+## Installation instructions
+
+A working TeX installation is required.
+
+This is a self-extracting dtx file, so run
+
+    pdflatex palette.dtx
+
+to generate the README, documentation, and packages.
+%</readme>
 % \fi
-%
+
 % \iffalse
+
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+    \expandafter\begingroup
+\fi
+%</internal>
 %<*install>
 
-\input docstrip
+\input docstrip.tex
 \keepsilent
+\askforoverwritefalse
 \preamble
 
 This is a generated file.
@@ -70,22 +99,35 @@ This package consists of the file palette.dtx,
 \Msg{*                                                           *}
 \Msg{*************************************************************}
 
-\endbatchfile
 %</install>
+%<install>\endbatchfile
 %<*internal>
 
-\usedir{tex/latex/palette}
-\generate{\file{\jobname.ins}{\from{\jobname.dtx}{install}}}
+\usedir{source/latex/palette}
+\generate{
+    \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
 \nopreamble\nopostamble
+
+\usedir{doc/latex/palette}
+\generate{
+    \file{README.md}{\from{\jobname.dtx}{readme}}
+}
+
+\ifx\fmtname\nameofplainTeX
+    \expandafter\endbatchfile
+\else
+    \expandafter\endgroup
+\fi
 %</internal>
 %
 %<color|symbol>\NeedsTeXFormat{LaTeX2e}
 %<color>\ProvidesPackage{colorpalette}
 %<symbol>\ProvidesPackage{symbolsuite}
-%<color|symbol>[2021/07/20 v1.0.0 Create palettes for colors and symbols]
+%<color|symbol>[2021/07/22 v1.0.0 Create palettes for colors and symbols]
 %
 %<*driver>
-\ProvidesFile{\jobname.dtx}[2021/07/20 v1.0.0 Create palettes for colors and symbols]
+\ProvidesFile{\jobname.dtx}[2021/07/22 v1.0.0 Create palettes for colors and symbols]
 \documentclass{ltxdoc}
 
 \EnableCrossrefs
@@ -102,7 +144,7 @@ This package consists of the file palette.dtx,
 %
 % \GetFileInfo{\jobname.dtx}
 %
-% \changes{v1.0.0}{2021/07/20}{Initial version}
+% \changes{v1.0.0}{2021/07/22}{Initial version}
 %
 % \title{\textsf{palette} -- Create palettes for colors and symbols}
 % \author{Dennis Chen \\ proofprogram@gmail.com}
@@ -111,8 +153,18 @@ This package consists of the file palette.dtx,
 % \maketitle
 %
 % \begin{abstract}
-%   The \textsf{palette} package provides \textsf{colorpalette.sty} and \textsf{symbolsuite.sty}, which can be used to create and manage palettes of colors and symbols, respectively.}
+%   The \textsf{palette} package provides \textsf{colorpalette.sty} and \textsf{symbolsuite.sty}, which can be used to create and manage palettes of colors and symbols, respectively.
 % \end{abstract}
+%
+% \section{colorpalette.sty}
+%
+% \iffalse
+%<*color>
+
+%</color>
+% \fi
+%
+% \section{symbolsuite.sty}
 %
 % \Finale
 %
