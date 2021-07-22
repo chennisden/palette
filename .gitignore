@@ -1,4 +1,5 @@
-# Remove tex-generated files
+# Remove latex-generated files
+*.ins
 *.sty
 *.log
 *.aux
