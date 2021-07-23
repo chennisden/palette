@@ -126,6 +126,9 @@ This package consists of the file palette.dtx,
 %<symbol>\ProvidesPackage{symbolsuite}
 %<color|symbol>[2021/07/22 v1.0.0 Create palettes for colors and symbols]
 %
+%\RequirePackage{ifallfalse}
+%\RequirePackage{macrolist}
+%
 %<*driver>
 \ProvidesFile{\jobname.dtx}[2021/07/22 v1.0.0 Create palettes for colors and symbols]
 \documentclass{ltxdoc}
@@ -156,11 +159,63 @@ This package consists of the file palette.dtx,
 %   The \textsf{palette} package provides \textsf{colorpalette.sty} and \textsf{symbolsuite.sty}, which can be used to create and manage palettes of colors and symbols, respectively.
 % \end{abstract}
 %
+% \section{Overview}
+% We will go over the basic structure of the user interface in broad terms first (i.e. no macros or environments yet). We will use \textsf{colorpalette} as our example here, but \textsf{symbolsuite} behaves virtually identically.
+%
+% First, the user can create palette \emph{themes}, which are independent from each other. Then, you can add colors to themes. Finally, you can make a palette associated with a theme and set its colors.
+%
 % \section{colorpalette.sty}
+%
+% \DescribeMacro{\newpalettetheme}
+% To create a new palette theme called \textsf{theme}, write |\newpalettetheme{theme}|.
 %
 % \iffalse
 %<*color>
-
+\newcommand\newpalettetheme[1]{
+    \newlist{colorpalette@theme@#1}
+}
+%</color>
+% \fi
+% \DescribeMacro{\addcolortotheme}
+% To add a color \textsf{color} to theme \textsf{theme}, write |\addcolortotheme{theme}{color}|.
+%
+% \iffalse
+%<*color>
+\newcommand\addcolortotheme[2]{
+    \listadd{colorpalette@theme@#1}{colorpalette@#2}
+}
+%</color>
+% \fi
+%
+% \DescribeMacro{\newpalette}
+% To create a new palette \textsf{palette} based on theme \textsf{theme}, write |\newpalette{theme}{palette}|.
+%
+% \iffalse
+%<*color>
+\newcommand\newpalette[2]{
+    % Check that the palette exists
+    \listexists{colorpalette@theme@#1}{}{
+        \PackageError{colorpalette}{The theme passed in does not exist}{}
+    }
+    % It doesn't really matter what we pass into the definition of this macro, only as long as it exists
+    \expandafter\def\csname colorpalette@theme@#1@#2\endcsname{}
+}
+%<*/color>
+% \fi
+%
+% \DescribeMacro{\setpalettecolor}
+% To set the color \textsf{color} (which was defined with respect to the theme of the palette) as the color value \textsf{value} in the format \textsf{encoding} (which by default is HTML) of palette \textsf{palette}, write |\setpalettecolor{palette}{color}[encoding]{value}|.
+%
+% \iffalse
+%<*color>
+\newcommand\setpalettecolor[2]{
+    \def\colorpalette@temp@palettename{#1}
+    \def\colorpalette@temp@colorname{#2}
+    \colorpalette@setpalettecolor
+}
+\newcommand\colorpalette@setpalettecolor[2][HTML]{
+    \definecolor{colorpalette@\colorpalette@temp@palettename @\colorpalette@temp@colorname}{#1}{#2}
+}
 %</color>
 % \fi
 %
