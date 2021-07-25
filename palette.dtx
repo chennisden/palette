@@ -172,7 +172,8 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*color>
 \newcommand\newpalettetheme[1]{
-    \newlist{colorpalette@theme@#1}
+    \newlist{colorpalette@theme@#1@palettes}
+    \newlist{colorpalette@theme@#1@colors}
 }
 %</color>
 % \fi
@@ -182,7 +183,7 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*color>
 \newcommand\addcolortotheme[2]{
-    \listadd{colorpalette@theme@#1}{colorpalette@#2}
+    \listadd{colorpalette@theme@#1@colors}{#2}
 }
 %</color>
 % \fi
@@ -196,27 +197,36 @@ This package consists of the file palette.dtx,
 %<*color>
 \newcommand\newpalette[2]{
     % Check that the theme exists
-    \listexists{colorpalette@theme@#1}{}{
+    \listexists{colorpalette@theme@#1@palettes}{}{
         \PackageError{colorpalette}{The theme passed in does not exist}{}
     }
-    % It doesn't really matter what we pass into the definition of this macro, only as long as it exists
-    \expandafter\def\csname colorpalette@theme@#1@#2\endcsname{}
+    \listadd{colorpalette@theme@#1@palettes}{#2}
 }
 %<*/color>
 % \fi
 %
 % \DescribeMacro{\setpalettecolor}
-% To set the color \textsf{color} (which was defined with respect to the theme of the palette) as the color value \textsf{value} in the format \textsf{encoding} (which by default is HTML) of palette \textsf{palette}, write |\setpalettecolor{palette}{color}[encoding]{value}|.
+% To set the color \textsf{color} (which was defined with respect to the theme of the palette) as the color value \textsf{value} in the format \textsf{encoding} (which by default is HTML) of palette \textsf{palette} in theme \textsf{theme}, write |\setpalettecolor{theme}{palette}{color}[encoding]{value}|.
 %
 % \iffalse
 %<*color>
-\newcommand\setpalettecolor[2]{
-    \def\colorpalette@temp@palettename{#1}
-    \def\colorpalette@temp@colorname{#2}
+\newcommand\setpalettecolor[3]{
+    \listexists{colorpalette@theme@#1@palettes}{}{
+        \PackageError{colorpalette}{The theme passed in does not exist}{}
+    }
+    \listcontains{colorpalette@theme@#1@palettes}{#2}{}{
+        \PackageError{colorpalette}{The palette passed in is not a defined palette of theme `#1'}{}
+    }
+    \listcontains{colorpalette@theme@#1@colors}{#3}{}{
+        \PackageError{colorpalette}{The color passed in is not a defined color of theme `#1'}{}
+    }
+    \def\colorpalette@temp@themename{#1}
+    \def\colorpalette@temp@palettename{#2}
+    \def\colorpalette@temp@colorname{#3}
     \colorpalette@setpalettecolor
 }
 \newcommand\colorpalette@setpalettecolor[2][HTML]{
-    \definecolor{colorpalette@\colorpalette@temp@palettename @\colorpalette@temp@colorname}{#1}{#2}
+    \definecolor{colorpalette@\colorpalette@temp@themename @\colorpalette@temp@palettename @\colorpalette@temp@colorname}{#1}{#2}
 }
 %</color>
 % \fi
