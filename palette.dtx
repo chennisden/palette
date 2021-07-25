@@ -190,10 +190,12 @@ This package consists of the file palette.dtx,
 % \DescribeMacro{\newpalette}
 % To create a new palette \textsf{palette} based on theme \textsf{theme}, write |\newpalette{theme}{palette}|.
 %
+% Palette names only need to be unique across the same theme. This means that you can have two palettes with the same name if they are associated with different themes.
+%
 % \iffalse
 %<*color>
 \newcommand\newpalette[2]{
-    % Check that the palette exists
+    % Check that the theme exists
     \listexists{colorpalette@theme@#1}{}{
         \PackageError{colorpalette}{The theme passed in does not exist}{}
     }
@@ -216,6 +218,34 @@ This package consists of the file palette.dtx,
 \newcommand\colorpalette@setpalettecolor[2][HTML]{
     \definecolor{colorpalette@\colorpalette@temp@palettename @\colorpalette@temp@colorname}{#1}{#2}
 }
+%</color>
+% \fi
+%
+% \DescribeMacro{\activepalette}
+% This sets the active palette of a theme. (This is how palettes are ``swapped in'' with respect to a theme.) To set the active palette of theme \textsf{theme} as \textsf{palette}, write |\activepalette{theme}{palette}|.
+%
+% \iffalse
+%<*color>
+\newcommand\activepalette[2]{%
+    \expandafter\def\csname colorpalette@#1@active\endcsname{#2}%
+}
+%</color>
+% \fi
+%
+% \DescribeMacro{\applycolor}
+% To use, write |\applycolor{theme}{color}|. This applies color \textsf{color} from the \emph{active} palette of theme \textsf{theme}. (This means that the newly defined color is passed into |\color|.) If \textsf{theme} has no active palette, an error will be thrown.
+%
+% \iffalse
+%<*color>
+\newcommand\applycolor[2]{\color{colorpalette@}}
+%</color>
+% \fi
+%
+% \DescribeMacro{\getcolor}
+% To use, write |\getcolor{theme}{color}|. This gets the \emph{internal} color name from the \emph{active} palette of \textsf{theme}. If \textsf{theme} has no active palette, an error will be thrown.
+%
+% \iffalse
+%<*color>
 %</color>
 % \fi
 %
