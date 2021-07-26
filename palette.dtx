@@ -126,9 +126,12 @@ This package consists of the file palette.dtx,
 %<symbol>\ProvidesPackage{symbolsuite}
 %<color|symbol>[2021/07/22 v1.0.0 Create palettes for colors and symbols]
 %
-%\RequirePackage{ifallfalse}
-%\RequirePackage{macrolist}
-%
+%<*color|symbol>
+\RequirePackage{xcolor}
+
+\RequirePackage{ifallfalse}
+\RequirePackage{macrolist}
+%</color|symbol>
 %<*driver>
 \ProvidesFile{\jobname.dtx}[2021/07/22 v1.0.0 Create palettes for colors and symbols]
 \documentclass{ltxdoc}
@@ -183,6 +186,9 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*color>
 \newcommand\addcolortotheme[2]{
+    \listexists{colorpalette@theme@#1@colors}{}{
+        \PackageError{colorpalette}{The theme passed in does not exist}{}
+    }
     \listadd{colorpalette@theme@#1@colors}{#2}
 }
 %</color>
@@ -206,7 +212,7 @@ This package consists of the file palette.dtx,
 % \fi
 %
 % \DescribeMacro{\setpalettecolor}
-% To set the color \textsf{color} (which was defined with respect to the theme of the palette) as the color value \textsf{value} in the format \textsf{encoding} (which by default is HTML) of palette \textsf{palette} in theme \textsf{theme}, write |\setpalettecolor{theme}{palette}{color}[encoding]{value}|.
+% To set the color \textsf{color} (which was defined with respect to the theme of the palette) as the color value \textsf{value} in the format \textsf{encoding} (which by default is HTML) of palette \textsf{palette} in theme \textsf{theme}, write \begin{verbatim}\setpalettecolor{theme}{palette}{color}[encoding]{value}\end{verbatim}
 %
 % \iffalse
 %<*color>
@@ -242,20 +248,21 @@ This package consists of the file palette.dtx,
 %</color>
 % \fi
 %
-% \DescribeMacro{\applycolor}
-% To use, write |\applycolor{theme}{color}|. This applies color \textsf{color} from the \emph{active} palette of theme \textsf{theme}. (This means that the newly defined color is passed into |\color|.) If \textsf{theme} has no active palette, an error will be thrown.
-%
-% \iffalse
-%<*color>
-\newcommand\applycolor[2]{\color{colorpalette@}}
-%</color>
-% \fi
-%
 % \DescribeMacro{\getcolor}
 % To use, write |\getcolor{theme}{color}|. This gets the \emph{internal} color name from the \emph{active} palette of \textsf{theme}. If \textsf{theme} has no active palette, an error will be thrown.
 %
 % \iffalse
 %<*color>
+\newcommand\getcolor[2]{colorpalette@#1\csname colorpalette@#1@active\endcsname @#2}
+%</color>
+% \fi
+%
+% \DescribeMacro{\applycolor}
+% To use, write |\applycolor{theme}{color}|. This applies color \textsf{color} from the \emph{active} palette of theme \textsf{theme}. (This means that the newly defined color is passed into |\color|.) If \textsf{theme} has no active palette, an error will be thrown.
+%
+% \iffalse
+%<*color>
+\newcommand\applycolor[2]{\color{\getcolor}}
 %</color>
 % \fi
 %
