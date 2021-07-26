@@ -17,7 +17,7 @@
 \iffalse
 %</internal>
 %<*readme>
-# The LaTeX package palette - version 1.0.0 (2021/07/22)
+# The LaTeX package palette - version 1.0.0 (2021/07/26)
 
 **palette** provides the ability to create custom color palettes and symbol palettes ("symbol suites"), and swap one palette in for another easily. It also allows the user to create a variable that represents the selected palette, and provides checks in case the variable represents a palette that does not exist.
 
@@ -124,14 +124,14 @@ This package consists of the file palette.dtx,
 %<color|symbol>\NeedsTeXFormat{LaTeX2e}
 %<color>\ProvidesPackage{colorpalette}
 %<symbol>\ProvidesPackage{symbolsuite}
-%<color|symbol>[2021/07/22 v1.0.0 Create palettes for colors and symbols]
+%<color|symbol>[2021/07/26 v1.0.0 Create palettes for colors and symbols]
 %<color>\RequirePackage{xcolor}
 %<*color|symbol>
 \RequirePackage{ifallfalse}
 \RequirePackage{macrolist}
 %</color|symbol>
 %<*driver>
-\ProvidesFile{\jobname.dtx}[2021/07/22 v1.0.0 Create palettes for colors and symbols]
+\ProvidesFile{\jobname.dtx}[2021/07/26 v1.0.0 Create palettes for colors and symbols]
 \documentclass{ltxdoc}
 
 \EnableCrossrefs
@@ -148,7 +148,7 @@ This package consists of the file palette.dtx,
 %
 % \GetFileInfo{\jobname.dtx}
 %
-% \changes{v1.0.0}{2021/07/22}{Initial version}
+% \changes{v1.0.0}{2021/07/26}{Initial version}
 %
 % \title{\textsf{palette} -- Create palettes for colors and symbols}
 % \author{Dennis Chen \\ proofprogram@gmail.com}
@@ -277,7 +277,7 @@ This package consists of the file palette.dtx,
 % \begin{verbatim}The palette passed in is not a defined palette of theme `#1'\end{verbatim}
 % where |#1| is the name of the theme.
 % \iffalse
-%<color>\newcommand\colorpalette@error@theme[1]{\PackageError{The palette passed in is not a defined palette of theme `#1'}{}{}}
+%<color>\newcommand\colorpalette@error@theme[1]{\PackageError{colorpalette}{The theme `#1' passed in is not defined}{}}
 % \fi
 %
 % If a palette that does not belong to a theme is passed in, the following error will be thrown:
@@ -296,6 +296,108 @@ This package consists of the file palette.dtx,
 %
 % \section{symbolsuite.sty}
 %
+% This package is nearly analogous to \textsf{colorpalette}. A \emph{suite} is analogous to a \emph{palette}, and a \emph{symbol} is analogous to a \emph{color}. \emph{Themes} are used in both packages.
+%
+% \subsection{Usage}
+%
+% \DescribeMacro{\newsuitetheme}
+% To create a new suite theme called \textsf{theme}, write |\newsuitetheme{theme}|.
+%
+% \iffalse
+%<*symbol>
+\newcommand\newsuitetheme[1]{
+    \newlist{symbolsuite@theme@#1@suites}
+    \newlist{symbolsuite@theme@#1@symbols}
+}
+%</symbol>
+% \fi
+% \DescribeMacro{\addsymboltotheme}
+% To add a symbol \textsf{symbol} to theme \textsf{theme}, write |\addsymboltotheme{theme}{symbol}|.
+%
+% \iffalse
+%<*symbol>
+\newcommand\addsymboltotheme[2]{
+    \symbolsuite@themecheck{#1}
+    \listadd{symbolsuite@theme@#1@symbols}{#2}
+}
+%</symbol>
+% \fi
+%
+% \DescribeMacro{\newsuite}
+% To create a new suite \textsf{suite} based on theme \textsf{theme}, write |\newsuite{theme}{suite}|.
+%
+% Suite names only need to be unique across the same theme. This means that you can have two suites with the same name if they are associated with different themes.
+%
+% \iffalse
+%<*symbol>
+\newcommand\newsuite[2]{
+    \symbolsuite@themecheck{#1}
+    \listadd{symbolsuite@theme@#1@suites}{#2}
+}
+%</symbol>
+% \fi
+%
+% \DescribeMacro{\setsuitesymbol}
+% To set the symbol \textsf{symbol} (which was defined with respect to the theme of the suite) as the icon \textsf{icon} of suite \textsf{suite} in theme \textsf{theme}, write \begin{verbatim}\setsuitesymbol{theme}{suite}{symbol}{icon}\end{verbatim}
+%
+% \iffalse
+%<symbol>\newcommand\setsuitesymbol[4]{\expandafter\def\csname symbolsuite@#1@#2@#3\endcsname{#4}}
+% \fi
+%
+% \DescribeMacro{\activesuite}
+% This sets the active suite of a theme. (This is how suites are ``swapped in'' with respect to a theme.) To set the active suite of theme \textsf{theme} as \textsf{suite}, write |\activesuite{theme}{suite}|.
+%
+% \iffalse
+%<*symbol>
+\newcommand\activesuite[2]{
+    \symbolsuite@themecheck{#1}
+    \symbolsuite@suitecheck{#1}{#2}
+    \expandafter\def\csname symbolsuite@#1@active\endcsname{#2}
+}
+%</symbol>
+% \fi
+%
+% \DescribeMacro{\printsymbol}
+% To use, write |\printsymbol{theme}{symbol}|. This is similar to \textsf{colorpalette.sty}'s |\applycolor|.
+% \iffalse
+%<*symbol>
+\newcommand\printsymbol[2]{%
+    \symbolsuite@themecheck{#1}%
+    \symbolsuite@symbolcheck{#1}{#2}%
+    \csname symbolsuite@#1@\csname symbolsuite@#1@active\endcsname @#2\endcsname%
+}
+%</symbol>
+% \fi
+%
+% \subsection{Error Messages}
+% \iffalse
+%<*symbol>
+\newcommand\symbolsuite@themecheck[1]{\listexists{symbolsuite@theme@#1@suites}{}{\symbolsuite@error@theme{#1}}}
+\newcommand\symbolsuite@suitecheck[2]{\listcontains{symbolsuite@theme@#1@suites}{#2}{}{\symbolsuite@error@suite{#1}{#2}}}
+\newcommand\symbolsuite@symbolcheck[2]{\listcontains{symbolsuite@theme@#1@symbols}{#2}{}{\symbolsuite@error@symbol{#1}{#2}}}
+%</symbol>
+% \fi
+%
+% If a nonexistent theme is passed in, the following error will be thrown:
+% \begin{verbatim}The palette passed in is not a defined palette of theme `#1'\end{verbatim}
+% where |#1| is the name of the theme.
+% \iffalse
+%<symbol>\newcommand\symbolsuite@error@theme[1]{\PackageError{symbolsuite}{The theme `#1' passed in is not defined}{}}
+% \fi
+%
+% If a suite that does not belong to a theme is passed in, the following error will be thrown:
+% \begin{verbatim}The suite `#2' passed in is not a defined suite of theme `#1'\end{verbatim}
+% where |#1| is the name of the theme and |#2| is the name of the suite.
+% \iffalse
+%<symbol>\newcommand\symbolsuite@error@suite[2]{\PackageError{symbolsuite}{The suite `#2' passed in is not a defined suite of theme `#1'}{}}
+% \fi
+%
+% If a symbol that does not belong to a theme is passed in, the following error will be thrown:
+% \begin{verbatim}The symbol `#2' passed in is not a defined symbol of theme `#1'\end{verbatim}
+% where |#1| is the name of the theme and |#2| is the name of the symbol.
+% \iffalse
+%<symbol>\newcommand\symbolsuite@error@symbol[2]{\PackageError{symbolsuite}{The symbol `#2' passed in is not a defined color of theme `#1'}{}}
+% \fi
 % \Finale
 %
 \endinput
