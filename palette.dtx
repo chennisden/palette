@@ -73,14 +73,14 @@ To produce the documentation, run palette.dtx through pdflatex.
 
 This package consists of the file palette.dtx,
           and the generated files colorpalette.sty,
-                                  symbolsuite.sty,
+                                  symbolpalette,
                                   palette.pdf.
 \endpostamble
 
 \usedir{tex/latex/palette}
 \generate{
     \file{colorpalette.sty}{\from{\jobname.dtx}{color}}
-    \file{symbolsuite.sty}{\from{\jobname.dtx}{symbol}}
+    \file{symbolpalette}{\from{\jobname.dtx}{symbol}}
 }
 
 \obeyspaces
@@ -90,7 +90,7 @@ This package consists of the file palette.dtx,
 \Msg{* files into a directory searched by TeX:                   *}
 \Msg{*                                                           *}
 \Msg{*     colorpalette.sty                                      *}
-\Msg{*     symbolsuite.sty                                       *}
+\Msg{*     symbolpalette                                       *}
 \Msg{*                                                           *}
 \Msg{* To produce the documentation, run the file                *}
 \Msg{* palette.dtx through LaTeX.                                *}
@@ -127,7 +127,6 @@ This package consists of the file palette.dtx,
 %<color|symbol>[2021/07/26 v1.0.0 Create palettes for colors and symbols]
 %<color>\RequirePackage{xcolor}
 %<*color|symbol>
-\RequirePackage{ifallfalse}
 \RequirePackage{macrolist}
 %</color|symbol>
 %<*driver>
@@ -157,7 +156,7 @@ This package consists of the file palette.dtx,
 % \maketitle
 %
 % \begin{abstract}
-%   The \textsf{palette} package provides \textsf{colorpalette.sty} and \textsf{symbolsuite.sty}, which can be used to create and manage palettes of colors and symbols, respectively.
+%   The \textsf{palette} package provides \textsf{colorpalette.sty} and \textsf{symbolpalette}, which can be used to create and manage palettes of colors and symbols, respectively.
 % \end{abstract}
 %
 % \section{Overview}
@@ -294,9 +293,11 @@ This package consists of the file palette.dtx,
 %<color>\newcommand\colorpalette@error@color[2]{\PackageError{colorpalette}{The color `#2' passed in is not a defined color of theme `#1'}{}}
 % \fi
 %
-% \section{symbolsuite.sty}
+% \section{symbolpalette}
 %
 % This package is nearly analogous to \textsf{colorpalette}. A \emph{suite} is analogous to a \emph{palette}, and a \emph{symbol} is analogous to a \emph{color}. \emph{Themes} are used in both packages.
+%
+% Despite the name \textsf{symbolpalette} (which is used to identify it as one of the files of the package \textsf{palette}), the main keyword is a \emph{suite}. This is because the keyword \emph{palette} is already used for \textsf{colorpalette}.
 %
 % \subsection{Usage}
 %
