@@ -307,8 +307,8 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*symbol>
 \newcommand\newsuitetheme[1]{
-    \newlist{symbolpalette@theme@#1@suites}
-    \newlist{symbolpalette@theme@#1@symbols}
+    \newlist{symbolsuite@theme@#1@suites}
+    \newlist{symbolsuite@theme@#1@symbols}
 }
 %</symbol>
 % \fi
@@ -318,8 +318,8 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*symbol>
 \newcommand\addsymboltotheme[2]{
-    \symbolpalette@themecheck{#1}
-    \listadd{symbolpalette@theme@#1@symbols}{#2}
+    \symbolsuite@themecheck{#1}
+    \listadd{symbolsuite@theme@#1@symbols}{#2}
 }
 %</symbol>
 % \fi
@@ -332,8 +332,8 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*symbol>
 \newcommand\newsuite[2]{
-    \symbolpalette@themecheck{#1}
-    \listadd{symbolpalette@theme@#1@suites}{#2}
+    \symbolsuite@themecheck{#1}
+    \listadd{symbolsuite@theme@#1@suites}{#2}
 }
 %</symbol>
 % \fi
@@ -342,7 +342,7 @@ This package consists of the file palette.dtx,
 % To set the symbol \textsf{symbol} (which was defined with respect to the theme of the suite) as the icon \textsf{icon} of suite \textsf{suite} in theme \textsf{theme}, write \begin{verbatim}\setsuitesymbol{theme}{suite}{symbol}{icon}\end{verbatim}
 %
 % \iffalse
-%<symbol>\newcommand\setsuitesymbol[4]{\expandafter\def\csname symbolpalette@#1@#2@#3\endcsname{#4}}
+%<symbol>\newcommand\setsuitesymbol[4]{\expandafter\def\csname symbolsuite@#1@#2@#3\endcsname{#4}}
 % \fi
 %
 % \DescribeMacro{\activesuite}
@@ -351,9 +351,9 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*symbol>
 \newcommand\activesuite[2]{
-    \symbolpalette@themecheck{#1}
-    \symbolpalette@suitecheck{#1}{#2}
-    \expandafter\def\csname symbolpalette@#1@active\endcsname{#2}
+    \symbolsuite@themecheck{#1}
+    \symbolsuite@suitecheck{#1}{#2}
+    \expandafter\def\csname symbolsuite@#1@active\endcsname{#2}
 }
 %</symbol>
 % \fi
@@ -363,9 +363,9 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*symbol>
 \newcommand\printsymbol[2]{%
-    \symbolpalette@themecheck{#1}%
-    \symbolpalette@symbolcheck{#1}{#2}%
-    \csname symbolpalette@#1@\csname symbolpalette@#1@active\endcsname @#2\endcsname%
+    \symbolsuite@themecheck{#1}%
+    \symbolsuite@symbolcheck{#1}{#2}%
+    \csname symbolsuite@#1@\csname symbolsuite@#1@active\endcsname @#2\endcsname%
 }
 %</symbol>
 % \fi
@@ -373,9 +373,9 @@ This package consists of the file palette.dtx,
 % \subsection{Error Messages}
 % \iffalse
 %<*symbol>
-\newcommand\symbolpalette@themecheck[1]{\listexists{symbolpalette@theme@#1@suites}{}{\symbolpalette@error@theme{#1}}}
-\newcommand\symbolpalette@suitecheck[2]{\listcontains{symbolpalette@theme@#1@suites}{#2}{}{\symbolpalette@error@suite{#1}{#2}}}
-\newcommand\symbolpalette@symbolcheck[2]{\listcontains{symbolpalette@theme@#1@symbols}{#2}{}{\symbolpalette@error@symbol{#1}{#2}}}
+\newcommand\symbolsuite@themecheck[1]{\listexists{symbolsuite@theme@#1@suites}{}{\symbolsuite@error@theme{#1}}}
+\newcommand\symbolsuite@suitecheck[2]{\listcontains{symbolsuite@theme@#1@suites}{#2}{}{\symbolsuite@error@suite{#1}{#2}}}
+\newcommand\symbolsuite@symbolcheck[2]{\listcontains{symbolsuite@theme@#1@symbols}{#2}{}{\symbolsuite@error@symbol{#1}{#2}}}
 %</symbol>
 % \fi
 %
@@ -383,21 +383,21 @@ This package consists of the file palette.dtx,
 % \begin{verbatim}The palette passed in is not a defined palette of theme `#1'\end{verbatim}
 % where |#1| is the name of the theme.
 % \iffalse
-%<symbol>\newcommand\symbolpalette@error@theme[1]{\PackageError{symbolpalette}{The theme `#1' passed in is not defined}{}}
+%<symbol>\newcommand\symbolsuite@error@theme[1]{\PackageError{symbolpalette}{The theme `#1' passed in is not defined}{}}
 % \fi
 %
 % If a suite that does not belong to a theme is passed in, the following error will be thrown:
 % \begin{verbatim}The suite `#2' passed in is not a defined suite of theme `#1'\end{verbatim}
 % where |#1| is the name of the theme and |#2| is the name of the suite.
 % \iffalse
-%<symbol>\newcommand\symbolpalette@error@suite[2]{\PackageError{symbolpalette}{The suite `#2' passed in is not a defined suite of theme `#1'}{}}
+%<symbol>\newcommand\symbolsuite@error@suite[2]{\PackageError{symbolpalette}{The suite `#2' passed in is not a defined suite of theme `#1'}{}}
 % \fi
 %
 % If a symbol that does not belong to a theme is passed in, the following error will be thrown:
 % \begin{verbatim}The symbol `#2' passed in is not a defined symbol of theme `#1'\end{verbatim}
 % where |#1| is the name of the theme and |#2| is the name of the symbol.
 % \iffalse
-%<symbol>\newcommand\symbolpalette@error@symbol[2]{\PackageError{symbolpalette}{The symbol `#2' passed in is not a defined color of theme `#1'}{}}
+%<symbol>\newcommand\symbolsuite@error@symbol[2]{\PackageError{symbolpalette}{The symbol `#2' passed in is not a defined color of theme `#1'}{}}
 % \fi
 % \Finale
 %
