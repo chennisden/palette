@@ -1,4 +1,4 @@
-# The LaTeX package palette - version 1.0.0 (2021/07/26)
+# The LaTeX package palette - version 1.0.0 (2021/07/27)
 
 **palette** provides the ability to create custom color palettes and symbol palettes ("symbol suites"), and swap one palette in for another easily. It also allows the user to create a variable that represents the selected palette, and provides checks in case the variable represents a palette that does not exist.
 
