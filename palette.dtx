@@ -17,7 +17,7 @@
 \iffalse
 %</internal>
 %<*readme>
-# The LaTeX package palette - version 1.0.0 (2021/07/27)
+# The LaTeX package palette - version 1.1.0 (2021/07/29)
 
 **palette** provides the ability to create custom color palettes and symbol palettes ("symbol suites"), and swap one palette in for another easily. It also allows the user to create a variable that represents the selected palette, and provides checks in case the variable represents a palette that does not exist.
 
@@ -124,7 +124,7 @@ This package consists of the file palette.dtx,
 %<color|symbol>\NeedsTeXFormat{LaTeX2e}
 %<color>\ProvidesPackage{colorpalette}
 %<symbol>\ProvidesPackage{symbolpalette}
-%<color|symbol>[2021/07/27 v1.0.0 Create palettes for colors and symbols]
+%<color|symbol>[2021/07/29 v1.1.0 Create palettes for colors and symbols]
 %<color>\RequirePackage{xcolor}
 %<*color|symbol>
 \RequirePackage{macrolist}
@@ -147,6 +147,7 @@ This package consists of the file palette.dtx,
 %
 % \GetFileInfo{\jobname.dtx}
 %
+% \changes{v1.1.0}{2021/07/29}{Update macrolist (to get compatibility with etoolbox)}
 % \changes{v1.0.0}{2021/07/27}{Initial version}
 %
 % \title{\textsf{palette} -- Create palettes for colors and symbols}
@@ -174,8 +175,8 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*color>
 \newcommand\newpalettetheme[1]{
-    \newlist{colorpalette@theme@#1@palettes}
-    \newlist{colorpalette@theme@#1@colors}
+    \macronewlist{colorpalette@theme@#1@palettes}
+    \macronewlist{colorpalette@theme@#1@colors}
 }
 %</color>
 % \fi
@@ -186,7 +187,7 @@ This package consists of the file palette.dtx,
 %<*color>
 \newcommand\addcolortotheme[2]{
     \colorpalette@themecheck{#1}
-    \listadd{colorpalette@theme@#1@colors}{#2}
+    \macrolistadd{colorpalette@theme@#1@colors}{#2}
 }
 %</color>
 % \fi
@@ -201,7 +202,7 @@ This package consists of the file palette.dtx,
 \newcommand\newpalette[2]{
     % Check that the theme exists
     \colorpalette@themecheck{#1}
-    \listadd{colorpalette@theme@#1@palettes}{#2}
+    \macrolistadd{colorpalette@theme@#1@palettes}{#2}
 }
 %</color>
 % \fi
@@ -266,9 +267,9 @@ This package consists of the file palette.dtx,
 % \subsection{Error Messages}
 % \iffalse
 %<*color>
-\newcommand\colorpalette@themecheck[1]{\listexists{colorpalette@theme@#1@palettes}{}{\colorpalette@error@theme{#1}}}
-\newcommand\colorpalette@palettecheck[2]{\listcontains{colorpalette@theme@#1@palettes}{#2}{}{\colorpalette@error@palette{#1}{#2}}}
-\newcommand\colorpalette@colorcheck[2]{\listcontains{colorpalette@theme@#1@colors}{#2}{}{\colorpalette@error@color{#1}{#2}}}
+\newcommand\colorpalette@themecheck[1]{\macrolistexists{colorpalette@theme@#1@palettes}{}{\colorpalette@error@theme{#1}}}
+\newcommand\colorpalette@palettecheck[2]{\macrolistcontains{colorpalette@theme@#1@palettes}{#2}{}{\colorpalette@error@palette{#1}{#2}}}
+\newcommand\colorpalette@colorcheck[2]{\macrolistcontains{colorpalette@theme@#1@colors}{#2}{}{\colorpalette@error@color{#1}{#2}}}
 %</color>
 % \fi
 %
@@ -307,8 +308,8 @@ This package consists of the file palette.dtx,
 % \iffalse
 %<*symbol>
 \newcommand\newsuitetheme[1]{
-    \newlist{symbolsuite@theme@#1@suites}
-    \newlist{symbolsuite@theme@#1@symbols}
+    \macronewlist{symbolsuite@theme@#1@suites}
+    \macronewlist{symbolsuite@theme@#1@symbols}
 }
 %</symbol>
 % \fi
@@ -319,7 +320,7 @@ This package consists of the file palette.dtx,
 %<*symbol>
 \newcommand\addsymboltotheme[2]{
     \symbolsuite@themecheck{#1}
-    \listadd{symbolsuite@theme@#1@symbols}{#2}
+    \macrolistadd{symbolsuite@theme@#1@symbols}{#2}
 }
 %</symbol>
 % \fi
@@ -333,7 +334,7 @@ This package consists of the file palette.dtx,
 %<*symbol>
 \newcommand\newsuite[2]{
     \symbolsuite@themecheck{#1}
-    \listadd{symbolsuite@theme@#1@suites}{#2}
+    \macrolistadd{symbolsuite@theme@#1@suites}{#2}
 }
 %</symbol>
 % \fi
@@ -373,9 +374,9 @@ This package consists of the file palette.dtx,
 % \subsection{Error Messages}
 % \iffalse
 %<*symbol>
-\newcommand\symbolsuite@themecheck[1]{\listexists{symbolsuite@theme@#1@suites}{}{\symbolsuite@error@theme{#1}}}
-\newcommand\symbolsuite@suitecheck[2]{\listcontains{symbolsuite@theme@#1@suites}{#2}{}{\symbolsuite@error@suite{#1}{#2}}}
-\newcommand\symbolsuite@symbolcheck[2]{\listcontains{symbolsuite@theme@#1@symbols}{#2}{}{\symbolsuite@error@symbol{#1}{#2}}}
+\newcommand\symbolsuite@themecheck[1]{\macrolistexists{symbolsuite@theme@#1@suites}{}{\symbolsuite@error@theme{#1}}}
+\newcommand\symbolsuite@suitecheck[2]{\macrolistcontains{symbolsuite@theme@#1@suites}{#2}{}{\symbolsuite@error@suite{#1}{#2}}}
+\newcommand\symbolsuite@symbolcheck[2]{\macrolistcontains{symbolsuite@theme@#1@symbols}{#2}{}{\symbolsuite@error@symbol{#1}{#2}}}
 %</symbol>
 % \fi
 %
@@ -396,6 +397,7 @@ This package consists of the file palette.dtx,
 % If a symbol that does not belong to a theme is passed in, the following error will be thrown:
 % \begin{verbatim}The symbol `#2' passed in is not a defined symbol of theme `#1'\end{verbatim}
 % where |#1| is the name of the theme and |#2| is the name of the symbol.
+% \changes{v1.0.1}{2020/07/28}{Make error message refer to symbol, not color}
 % \iffalse
 %<symbol>\newcommand\symbolsuite@error@symbol[2]{\PackageError{symbolpalette}{The symbol `#2' passed in is not a defined symbol of theme `#1'}{}}
 % \fi
